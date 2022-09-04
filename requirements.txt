@@ -1,0 +1,17 @@
+Django==3.2.12
+django-cors-headers==3.10.1
+django-filter==21.1
+django-rq==2.5.1
+djangorestframework
+djangorestframework-simplejwt
+gunicorn==20.1.0
+intelli-gateway==0.0.8
+numpy
+pandas
+psycopg2-binary==2.9.3
+PyJWT==1.7.0
+python-decouple==3.6
+pytz==2022.1
+redis==4.2.2
+requests==2.27.1
+rq==1.10.1
