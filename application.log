@@ -507,3 +507,7 @@ Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2222
 Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2222
+Bad Request: /api/token/fetch/
+"POST /api/token/fetch/ HTTP/1.1" 400 79
+Unauthorized: /api/token/fetch/
+"POST /api/token/fetch/ HTTP/1.1" 401 63

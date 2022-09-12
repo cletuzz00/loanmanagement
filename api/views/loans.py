@@ -7,6 +7,8 @@ from rest_framework import status, generics
 from loans.models import Loan, Clients, InterestRate
 from api.serializers.loans import LoanSerializer, ClientSerializer, InterestRateSerializer
 from rest_framework.decorators import action
+import datetime
+from loans.helper_function import Emails
 
 class LoanViewset(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
@@ -22,6 +24,22 @@ class LoanViewset(viewsets.ModelViewSet):
             queryset = Loan.objects.all()
         serializer = LoanSerializer(queryset, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+    @action(methods=['get'],detail=False,url_path='notifications')
+    def notifications(self, request):
+        # notify all clients with loans that are due
+        queryset = Loan.objects.filter(is_active=True, is_paid=False, is_defaulted=False)
+        for loan in queryset:
+            if loan.repayment_date < datetime.datetime.now().date():
+                loan.is_overdue = True if loan.is_overdue == False else loan.is_overdue
+                loan.save()
+        # send email to clients with overdue loans
+        for loan in queryset:
+            if loan.is_overdue:
+                print(f"send email to {loan.client.email}")
+                # send email
+                Emails.send(f"Loan is Due , your repayment date is {loan.repayment_date}",loan.client.email)
+        return JsonResponse(status=status.HTTP_200_OK,data={'message':'notifications sent'}, safe=False)
         
 
 
